@@ -1,0 +1,316 @@
+---
+import Icon from './Icon.astro';
+import { ui } from '../i18n/ui';
+import { href } from '../data/site';
+import type { Lang } from '../data/services';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = ui[lang].calc;
+const home = lang === 'es' ? '/' : '/en/';
+---
+
+<section class="section calc" aria-labelledby="calc-title">
+  <div class="ambient" style="--glow-gold-top: 20%; --glow-gold-left: 55%; --glow-blue-top: 40%; --glow-blue-right: 50%;" aria-hidden="true"></div>
+  <div class="wrap grid">
+    <header class="intro">
+      <h2 id="calc-title">{t.title}</h2>
+      <p>{t.sub}</p>
+    </header>
+
+    <form class="panel glass" data-calc onsubmit="return false">
+      <fieldset class="field">
+        <legend>{t.situation}</legend>
+        <div class="choices three">
+          {
+            t.types.map(([value, label], i) => (
+              <label class="choice">
+                <input type="radio" name="calc-type" value={value} checked={i === 1} />
+                <span>{label}</span>
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
+
+      <div class="field">
+        <div class="range-head">
+          <label for="calc-income">{t.income}</label>
+          <output for="calc-income" class="income tabular" data-income-out>$50,000</output>
+        </div>
+        <input id="calc-income" class="range" type="range" min="10000" max="200000" step="5000" value="50000" data-income />
+      </div>
+
+      <fieldset class="field">
+        <legend>{t.tracking}</legend>
+        <div class="choices two">
+          <label class="choice">
+            <input type="radio" name="calc-track" value="no" checked />
+            <span>{t.trackNo}</span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="calc-track" value="yes" />
+            <span>{t.trackYes}</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <div class="result">
+        <p class="result-label">{t.result}</p>
+        <p class="result-value tabular" data-result aria-live="polite">$3,600 – $7,200</p>
+        <p class="foot">* {t.foot}</p>
+      </div>
+
+      <a class="btn btn-gold cta" href={href(`${home}#book`)}>
+        {t.cta}
+        <Icon name="arrow-right" size={18} class="icon-arrow" />
+      </a>
+    </form>
+  </div>
+</section>
+
+<script>
+  // Same educational model as the original site: % of income by profile, scaled by record-keeping.
+  const form = document.querySelector<HTMLFormElement>('[data-calc]');
+  if (form) {
+    const income = form.querySelector<HTMLInputElement>('[data-income]')!;
+    const out = form.querySelector<HTMLOutputElement>('[data-income-out]')!;
+    const result = form.querySelector<HTMLElement>('[data-result]')!;
+    const money = (n: number) => '$' + n.toLocaleString('en-US');
+
+    const update = () => {
+      const value = Number(income.value);
+      const type = (form.querySelector('input[name=calc-type]:checked') as HTMLInputElement).value;
+      const tracking = (form.querySelector('input[name=calc-track]:checked') as HTMLInputElement).value;
+
+      let pct = type === 'w2' ? 0.01 : type === '1099' ? 0.08 : 0.1;
+      pct *= tracking === 'no' ? 1.5 : 0.5;
+      let low = Math.round((value * pct * 0.6) / 100) * 100;
+      let high = Math.round((value * pct * 1.2) / 100) * 100;
+      if (low < 100) low = 100;
+      if (high <= low) high = low + 300;
+
+      out.textContent = money(value);
+      income.style.setProperty('--fill', `${((value - Number(income.min)) / (Number(income.max) - Number(income.min))) * 100}%`);
+      result.textContent = `${money(low)} – ${money(high)}`;
+    };
+    form.addEventListener('input', update);
+    update();
+  }
+</script>
+
+<style>
+  .calc {
+    overflow: hidden;
+  }
+  .grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: clamp(2rem, 1.5rem + 4vw, 6rem);
+    align-items: start;
+  }
+  .intro {
+    padding-top: 1.5rem;
+  }
+  .intro h2 {
+    font-size: var(--step-3);
+  }
+  .intro p {
+    margin-top: 1.25rem;
+    color: var(--ash);
+    font-size: var(--step-1);
+    line-height: 1.55;
+    max-width: 40ch;
+  }
+
+  .panel {
+    padding: clamp(1.25rem, 0.9rem + 1.6vw, 2.25rem);
+    border-radius: 26px;
+    display: grid;
+    gap: 1.75rem;
+  }
+  .field {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+  }
+  legend,
+  .range-head label {
+    font-size: 0.9375rem;
+    color: var(--ash);
+    margin-bottom: 0.75rem;
+    padding: 0;
+  }
+  .choices {
+    display: grid;
+    gap: 4px;
+    padding: 4px;
+    border-radius: 18px;
+    background: rgb(4 7 14 / 0.45);
+  }
+  .three {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .two {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .choice {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 48px;
+    padding: 0.5rem 0.6rem;
+    border-radius: 14px;
+    color: var(--ash);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.25;
+    cursor: pointer;
+    transition:
+      background-color 0.35s var(--ease-out),
+      color 0.35s var(--ease-out);
+  }
+  .choice input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+  .choice:hover {
+    color: var(--ivory);
+  }
+  .choice:has(input:checked) {
+    background: rgb(237 237 243 / 0.13);
+    color: var(--ivory);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.1);
+  }
+  .choice:has(input:focus-visible) {
+    outline: 2px solid var(--gold-hi);
+    outline-offset: 2px;
+  }
+
+  .range-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .income {
+    font-family: var(--font-display);
+    font-stretch: 108%;
+    font-size: 1.25rem;
+    font-weight: 480;
+  }
+  .range {
+    --fill: 21%;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 32px;
+    background: transparent;
+    cursor: pointer;
+    margin: 0;
+  }
+  .range::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--gold) var(--fill), rgb(237 237 243 / 0.14) var(--fill));
+  }
+  .range::-moz-range-track {
+    height: 4px;
+    border-radius: 4px;
+    background: rgb(237 237 243 / 0.14);
+  }
+  .range::-moz-range-progress {
+    height: 4px;
+    border-radius: 4px;
+    background: var(--gold);
+  }
+  .range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 24px;
+    height: 24px;
+    margin-top: -10px;
+    border-radius: 50%;
+    background: var(--ivory);
+    border: 0;
+    box-shadow:
+      0 0 0 6px rgb(178 144 93 / 0.25),
+      0 4px 12px rgb(0 0 0 / 0.4);
+    transition: box-shadow 0.25s var(--ease-out);
+  }
+  .range::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--ivory);
+    border: 0;
+    box-shadow:
+      0 0 0 6px rgb(178 144 93 / 0.25),
+      0 4px 12px rgb(0 0 0 / 0.4);
+  }
+  .range:active::-webkit-slider-thumb {
+    box-shadow:
+      0 0 0 10px rgb(178 144 93 / 0.3),
+      0 4px 12px rgb(0 0 0 / 0.4);
+  }
+  .range:focus-visible {
+    outline: none;
+  }
+  .range:focus-visible::-webkit-slider-thumb {
+    outline: 2px solid var(--gold-hi);
+    outline-offset: 3px;
+  }
+
+  .result {
+    padding: 1.5rem;
+    border-radius: 18px;
+    background: rgb(4 7 14 / 0.4);
+    border: 1px solid var(--line);
+  }
+  .result-label {
+    font-size: 0.875rem;
+    color: var(--ash);
+  }
+  .result-value {
+    margin-top: 0.5rem;
+    font-family: var(--font-display);
+    font-stretch: 108%;
+    font-weight: 480;
+    font-size: clamp(1.75rem, 1.3rem + 2vw, 2.5rem);
+    letter-spacing: -0.015em;
+    color: var(--gold-ink);
+    line-height: 1.1;
+  }
+  .foot {
+    margin-top: 0.85rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .cta {
+    white-space: normal;
+    text-align: center;
+    line-height: 1.25;
+    padding-block: 0.75rem;
+  }
+
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 420px) {
+    .three {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

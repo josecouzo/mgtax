@@ -1,0 +1,163 @@
+---
+import { ui } from '../i18n/ui';
+import type { Lang } from '../data/services';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = ui[lang].process;
+---
+
+<section class="section tight process" id="process" aria-labelledby="process-title">
+  <div class="wrap">
+    <header class="section-head">
+      <h2 id="process-title">{t.title}</h2>
+      <p>{t.sub}</p>
+    </header>
+
+    <ol class="steps" data-steps>
+      {
+        t.steps.map(([title, text], i) => (
+          <li class="step">
+            <span class="node" aria-hidden="true">
+              <span class="num tabular">{i + 1}</span>
+            </span>
+            <h3>{title}</h3>
+            <p>{text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<script>
+  // The connecting line draws once as the steps enter the viewport.
+  const steps = document.querySelector('[data-steps]');
+  if (steps && 'IntersectionObserver' in window) {
+    steps.setAttribute('data-armed', '');
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          steps.setAttribute('data-in', '');
+          io.disconnect();
+        }
+      },
+      { threshold: 0.35 },
+    );
+    io.observe(steps);
+  }
+</script>
+
+<style>
+  .process {
+    background: linear-gradient(180deg, var(--canvas) 0%, var(--canvas-deep) 50%, var(--canvas) 100%);
+  }
+  .steps {
+    --node: 56px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1.5rem;
+  }
+  .steps::before,
+  .steps::after {
+    content: '';
+    position: absolute;
+    top: calc(var(--node) / 2);
+    left: calc(var(--node) / 2);
+    right: calc((100% - 6rem) / 5 - var(--node) / 2);
+    height: 1px;
+    background: var(--line-strong);
+  }
+  .steps::after {
+    background: linear-gradient(90deg, var(--gold), var(--gold-hi));
+    transform-origin: left;
+  }
+  .steps[data-armed]::after {
+    transform: scaleX(0);
+    transition: transform 1.6s var(--ease-out);
+  }
+  .steps[data-in]::after {
+    transform: scaleX(1);
+  }
+  .step {
+    position: relative;
+  }
+  .node {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: var(--node);
+    height: var(--node);
+    border-radius: 50%;
+    background: var(--canvas-deep);
+    border: 1px solid var(--line-strong);
+  }
+  .step:first-child .node {
+    border-color: var(--gold);
+  }
+  .num {
+    font-family: var(--font-display);
+    font-stretch: 112%;
+    font-size: 1.25rem;
+    font-weight: 480;
+    color: var(--gold-ink);
+  }
+  h3 {
+    margin-top: 1.5rem;
+    font-size: var(--step-1);
+  }
+  p {
+    margin-top: 0.65rem;
+    color: var(--ash);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 960px) {
+    .steps {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+    .steps::before,
+    .steps::after {
+      top: calc(var(--node) / 2);
+      bottom: calc(var(--node) / 2);
+      left: calc(var(--node) / 2);
+      right: auto;
+      width: 1px;
+      height: auto;
+    }
+    .steps::after {
+      background: linear-gradient(180deg, var(--gold), var(--gold-hi));
+      transform-origin: top;
+    }
+    .steps[data-armed]::after {
+      transform: scaleY(0);
+    }
+    .steps[data-in]::after {
+      transform: scaleY(1);
+    }
+    .step {
+      display: grid;
+      grid-template-columns: var(--node) 1fr;
+      column-gap: 1.25rem;
+      padding-bottom: 2rem;
+    }
+    .step:last-child {
+      padding-bottom: 0;
+    }
+    .node {
+      grid-row: span 2;
+    }
+    h3 {
+      margin-top: 0.85rem;
+    }
+  }
+</style>

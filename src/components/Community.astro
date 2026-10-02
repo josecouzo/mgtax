@@ -1,0 +1,255 @@
+---
+import Icon from './Icon.astro';
+import { ui } from '../i18n/ui';
+import { href, site } from '../data/site';
+import { services, type Lang } from '../data/services';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = ui[lang].community;
+const socialUrl = site.social as Record<string, string>;
+const preview = services[0][lang].docsShort.slice(0, 4);
+---
+
+<section class="section tight community" aria-label={t.reviewsTitle}>
+  <div class="wrap bento">
+    <article class="reviews card">
+      <div class="r-copy">
+        <span class="g" aria-hidden="true"><Icon name="google" brand size={22} /></span>
+        <h2>{t.reviewsTitle}</h2>
+        <p>{t.reviewsSub}</p>
+      </div>
+      <div class="actions">
+        <a class="btn btn-ghost" href={site.reviews} target="_blank" rel="noopener">
+          {t.seeReviews}
+          <Icon name="arrow-up-right" size={17} />
+        </a>
+        <a class="btn btn-quiet" href={site.leaveReview} target="_blank" rel="noopener">
+          <Icon name="star" size={17} />
+          {t.leaveReview}
+        </a>
+      </div>
+    </article>
+
+    <article class="social card">
+      <h2 class="small">{t.socialTitle}</h2>
+      <p>{t.socialSub}</p>
+      <ul role="list">
+        {
+          t.social.map(([id, name, desc]) => (
+            <li>
+              <a href={socialUrl[id]} target="_blank" rel="noopener">
+                <span class="s-icon">
+                  <Icon name={id} brand size={18} />
+                </span>
+                <span class="s-text">
+                  <strong>{name}</strong>
+                  <span>{desc}</span>
+                </span>
+                <Icon name="arrow-up-right" size={18} class="s-go" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </article>
+
+    <a class="checklist card" href={href(site.checklistPdf)} download>
+      <span class="file" aria-hidden="true"><Icon name="file-text" size={22} /></span>
+      <span class="c-text">
+        <strong>{t.checklistTitle}</strong>
+        <span>{t.checklistSub}</span>
+      </span>
+      <span class="preview" aria-hidden="true">
+        {preview.map((d) => <span class="pv"><Icon name="check" size={15} />{d}</span>)}
+        <span class="pv more-docs">+ {services[0][lang].docsFull.length - 4}</span>
+      </span>
+      <span class="dl"><Icon name="download" size={18} />{t.checklistCta}</span>
+    </a>
+  </div>
+</section>
+
+<style>
+  .bento {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 1rem;
+    align-items: start;
+  }
+  .card {
+    padding: clamp(1.5rem, 1.1rem + 1.6vw, 2.5rem);
+  }
+  .reviews {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem 4rem;
+    background:
+      radial-gradient(70% 140% at 0% 0%, rgb(178 144 93 / 0.16), transparent 60%),
+      var(--graphite);
+  }
+  .r-copy {
+    max-width: 40rem;
+  }
+  .g {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--ivory);
+    color: var(--canvas);
+  }
+  h2 {
+    margin-top: 1.75rem;
+    font-size: var(--step-3);
+  }
+  h2.small {
+    margin-top: 0;
+    font-size: var(--step-2);
+  }
+  .card p {
+    margin-top: 1rem;
+    color: var(--ash);
+    line-height: 1.6;
+    max-width: 48ch;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    flex: none;
+  }
+  .social ul {
+    list-style: none;
+    margin: 1.5rem 0 0;
+    padding: 0;
+  }
+  .social li + li {
+    border-top: 1px solid var(--line);
+  }
+  .social a {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 0;
+    min-height: 56px;
+    text-decoration: none;
+  }
+  .s-icon {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--obsidian);
+    flex: none;
+  }
+  .s-text {
+    display: grid;
+    gap: 0.1rem;
+    min-width: 0;
+  }
+  .s-text strong {
+    font-weight: 600;
+    font-size: 0.9375rem;
+  }
+  .s-text span {
+    color: var(--muted);
+    font-size: 0.8125rem;
+  }
+  .social a :global(.s-go) {
+    margin-left: auto;
+    color: var(--muted);
+    transition:
+      color 0.3s var(--ease-out),
+      transform 0.3s var(--ease-out);
+  }
+  .social a:hover :global(.s-go) {
+    color: var(--gold-ink);
+    transform: translate(2px, -2px);
+  }
+  .checklist {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+    text-decoration: none;
+    transition: background-color 0.35s var(--ease-out);
+  }
+  .checklist:hover {
+    background: var(--obsidian);
+  }
+  .file {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: rgb(178 144 93 / 0.14);
+    color: var(--gold-ink);
+    flex: none;
+  }
+  .c-text {
+    display: grid;
+    gap: 0.25rem;
+  }
+  .c-text strong {
+    font-family: var(--font-display);
+    font-stretch: 110%;
+    font-weight: 480;
+    font-size: var(--step-2);
+    line-height: 1.2;
+  }
+  .c-text span {
+    margin-top: 0.5rem;
+    color: var(--ash);
+    line-height: 1.6;
+  }
+  .preview {
+    display: grid;
+    gap: 0.55rem;
+    width: 100%;
+    padding: 1rem 1.1rem;
+    border-radius: 12px;
+    background: rgb(4 7 14 / 0.35);
+    border: 1px solid var(--line);
+  }
+  .pv {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--ash);
+    font-size: 0.8125rem;
+  }
+  .pv :global(.icon) {
+    color: var(--gold-ink);
+  }
+  .more-docs {
+    color: var(--muted);
+    padding-left: 1.6rem;
+  }
+  .dl {
+    margin-top: auto;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--gold-ink);
+    font-weight: 500;
+    font-size: 0.9375rem;
+    white-space: nowrap;
+  }
+  @media (max-width: 900px) {
+    .bento {
+      grid-template-columns: 1fr;
+    }
+    .reviews {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

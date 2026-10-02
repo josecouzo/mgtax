@@ -1,0 +1,40 @@
+---
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+interface Props {
+  name: string;
+  /** Brand marks come from simple-icons (filled); UI icons from Lucide (stroked). */
+  brand?: boolean;
+  size?: number;
+  class?: string;
+  label?: string;
+}
+
+const { name, brand = false, size = 20, class: cls = '', label } = Astro.props;
+const dir = brand ? 'simple-icons/icons' : 'lucide-static/icons';
+const raw = readFileSync(join(process.cwd(), 'node_modules', dir, `${name}.svg`), 'utf8');
+
+const inner = raw
+  .replace(/<!--[\s\S]*?-->/g, '')
+  .replace(/<title>[\s\S]*?<\/title>/, '')
+  .replace(/^[\s\S]*?<svg[^>]*>/, '')
+  .replace(/<\/svg>\s*$/, '');
+
+const a11y = label ? { role: 'img', 'aria-label': label } : { 'aria-hidden': 'true' };
+const paint = brand
+  ? { fill: 'currentColor' }
+  : { fill: 'none', stroke: 'currentColor', 'stroke-width': 1.75, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' };
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 24 24"
+  width={size}
+  height={size}
+  class:list={['icon', cls]}
+  focusable="false"
+  {...paint}
+  {...a11y}
+  set:html={inner}
+/>

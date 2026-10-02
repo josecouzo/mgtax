@@ -1,0 +1,284 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import photo from '../assets/louisville-night-graded.jpg';
+import Icon from './Icon.astro';
+import DocChecklist from './DocChecklist.astro';
+import Faq from './Faq.astro';
+import Contact from './Contact.astro';
+import { ui } from '../i18n/ui';
+import { href, site } from '../data/site';
+import { services, serviceHref, type Lang, type Service } from '../data/services';
+
+interface Props {
+  lang: Lang;
+  service: Service;
+}
+const { lang, service } = Astro.props;
+const t = ui[lang];
+const c = service[lang];
+const other = lang === 'es' ? 'en' : 'es';
+const home = lang === 'es' ? '/' : '/en/';
+const others = services.filter((s) => s.id !== service.id);
+---
+
+<Base lang={lang} alternate={serviceHref(service, other)} title={`${c.name} · MG Tax Maker LLC`} description={c.short}>
+  <section class="intro" data-hero>
+    <div class="plate" aria-hidden="true">
+      <Image src={photo} alt="" widths={[640, 1280, 1600]} sizes="100vw" loading="eager" class="plate-img" />
+    </div>
+    <div class="wrap inner">
+      <a class="back" href={href(`${home}#services`)}>
+        <Icon name="arrow-left" size={16} />
+        {t.servicePage.back}
+      </a>
+      <span class="badge"><Icon name={service.icon} size={26} /></span>
+      <h1>{c.name}</h1>
+      <p class="lede">{c.short}</p>
+      <div class="actions">
+        <a class="btn btn-gold" href={service.calendar} target="_blank" rel="noopener">
+          <Icon name="calendar-check" size={18} />
+          {c.cta}
+        </a>
+        <a class="btn btn-ghost" href={site.whatsappMsg[lang]} target="_blank" rel="noopener">
+          <Icon name="whatsapp" brand size={18} />
+          WhatsApp
+        </a>
+      </div>
+      <p class="meta"><Icon name="clock" size={15} />{t.hero.meta}</p>
+    </div>
+  </section>
+
+  <section class="section detail" aria-label={t.servicePage.includes}>
+    <div class="wrap grid">
+      <div class="includes card">
+        <h2>{t.servicePage.includes}</h2>
+        <ul role="list">
+          {
+            c.includes.map((i) => (
+              <li>
+                <Icon name="check" size={18} />
+                <span>{i}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="docs">
+        <h2>{t.servicePage.docs}</h2>
+        <p class="docs-sub">{t.servicePage.docsSub}</p>
+        <DocChecklist lang={lang} service={service.id} items={c.docsFull} variant="full" idPrefix={`sp-${service.id}`} title={t.booking.docsTitle} />
+      </div>
+    </div>
+  </section>
+
+  <Faq lang={lang} only={service.faq} title={t.servicePage.faq} id="service-faq" />
+
+  <section class="section others" aria-labelledby="others-title">
+    <div class="wrap">
+      <h2 id="others-title">{t.servicePage.others}</h2>
+      <ul class="other-list" role="list">
+        {
+          others.map((s) => (
+            <li>
+              <a class="other card" href={href(serviceHref(s, lang))}>
+                <span class="o-icon"><Icon name={s.icon} size={20} /></span>
+                <span class="o-name">{s[lang].name}</span>
+                <Icon name="arrow-up-right" size={18} class="o-go" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <Contact lang={lang} />
+</Base>
+
+<style>
+  .intro {
+    position: relative;
+    isolation: isolate;
+    padding: clamp(8rem, 6rem + 6vw, 11rem) 0 clamp(4rem, 3rem + 4vw, 6rem);
+    overflow: hidden;
+  }
+  .plate {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+  .plate::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, var(--canvas) 0%, rgb(12 17 29 / 0.92) 38%, rgb(12 17 29 / 0.35) 75%, rgb(12 17 29 / 0.2) 100%),
+      linear-gradient(180deg, rgb(12 17 29 / 0.7) 0%, transparent 30%, transparent 70%, var(--canvas) 100%);
+  }
+  .plate-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 70% 55%;
+  }
+  @media (max-width: 760px) {
+    .plate::after {
+      background: linear-gradient(180deg, rgb(12 17 29 / 0.85) 0%, rgb(12 17 29 / 0.82) 55%, var(--canvas) 100%);
+    }
+  }
+  .inner {
+    position: relative;
+    z-index: 1;
+    max-width: calc(52rem + var(--gutter) * 2);
+  }
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 44px;
+    color: var(--ash);
+    font-size: 0.9375rem;
+    text-decoration: none;
+  }
+  .back:hover {
+    color: var(--ivory);
+  }
+  .badge {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    margin-top: 2rem;
+    border-radius: 50%;
+    border: 1px solid var(--gold);
+    color: var(--gold-ink);
+  }
+  h1 {
+    margin-top: 1.75rem;
+    font-size: var(--step-4);
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+  .lede {
+    margin-top: 1.5rem;
+    max-width: 40rem;
+    color: var(--ash);
+    font-size: var(--step-1);
+    line-height: 1.55;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2.25rem;
+  }
+  .actions .btn {
+    --h: 56px;
+  }
+  .meta {
+    margin-top: 1rem;
+    color: var(--muted);
+    font-size: 0.8125rem;
+  }
+  .meta :global(.icon) {
+    display: inline-block;
+    vertical-align: -3px;
+    margin-right: 0.4rem;
+  }
+
+  .detail {
+    padding-top: 0;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 1rem;
+    align-items: start;
+  }
+  .includes {
+    padding: clamp(1.5rem, 1.1rem + 1.6vw, 2.5rem);
+    position: sticky;
+    top: 100px;
+  }
+  h2 {
+    font-size: var(--step-2);
+  }
+  .includes ul {
+    list-style: none;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.95rem;
+  }
+  .includes li {
+    display: flex;
+    gap: 0.75rem;
+    color: var(--ash);
+    line-height: 1.5;
+  }
+  .includes li :global(.icon) {
+    margin-top: 0.15rem;
+    color: var(--gold-ink);
+  }
+  .docs {
+    padding: clamp(0.5rem, 0.3rem + 1vw, 1rem) 0 0 clamp(0rem, -1rem + 3vw, 2rem);
+  }
+  .docs-sub {
+    margin: 0.75rem 0 1.5rem;
+    color: var(--ash);
+  }
+
+  .others h2 {
+    font-size: var(--step-3);
+    margin-bottom: 2rem;
+  }
+  .other-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  .other {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-height: 88px;
+    padding: 1.25rem 1.5rem;
+    text-decoration: none;
+    transition: background-color 0.35s var(--ease-out);
+  }
+  .other:hover {
+    background: var(--obsidian);
+  }
+  .o-icon {
+    color: var(--gold-ink);
+  }
+  .o-name {
+    font-family: var(--font-display);
+    font-stretch: 108%;
+    font-weight: 470;
+    font-size: 1.0625rem;
+  }
+  .other :global(.o-go) {
+    margin-left: auto;
+    color: var(--muted);
+  }
+
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+    .includes {
+      position: static;
+    }
+    .docs {
+      padding: 1.5rem 0 0;
+    }
+    .other-list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

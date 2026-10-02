@@ -1,0 +1,172 @@
+---
+import Icon from './Icon.astro';
+import { ui } from '../i18n/ui';
+import { href } from '../data/site';
+import { services, serviceHref, type Lang } from '../data/services';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = ui[lang].services;
+---
+
+<section class="section services" id="services" aria-labelledby="services-title">
+  <div class="ambient" style="--glow-gold-top: 35%; --glow-gold-left: -20%; --glow-blue-top: -10%;" aria-hidden="true"></div>
+  <div class="wrap inner">
+    <header class="section-head">
+      <h2 id="services-title">{t.title}</h2>
+      <p>{t.sub}</p>
+    </header>
+
+    <ul class="rows" role="list">
+      {
+        services.map((s) => (
+          <li>
+            <a class="row" href={href(serviceHref(s, lang))}>
+              <span class="mark">
+                <Icon name={s.icon} size={22} />
+              </span>
+              <span class="name">{s[lang].name}</span>
+              <span class="desc">{s[lang].short}</span>
+              <span class="tags">
+                {s[lang].includes.slice(0, 3).map((i) => (
+                  <span class="tag">{i}</span>
+                ))}
+              </span>
+              <span class="go" aria-hidden="true">
+                <Icon name="arrow-up-right" size={22} />
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .services {
+    overflow: hidden;
+  }
+  .inner {
+    position: relative;
+    z-index: 1;
+  }
+  .rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--line);
+  }
+  .rows li {
+    border-bottom: 1px solid var(--line);
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1.1fr) minmax(0, 1.4fr) 48px;
+    grid-template-areas:
+      'mark name desc go'
+      'mark name tags go';
+    column-gap: clamp(1.25rem, 1rem + 2vw, 3rem);
+    row-gap: 1rem;
+    align-items: start;
+    padding: clamp(1.75rem, 1.4rem + 1.4vw, 2.75rem) clamp(0.5rem, 0.2rem + 1.4vw, 1.5rem);
+    border-radius: var(--radius-card);
+    text-decoration: none;
+    transition: background-color 0.45s var(--ease-out);
+  }
+  .row:hover {
+    background: rgb(19 26 42 / 0.75);
+  }
+  .mark {
+    grid-area: mark;
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1px solid var(--line-strong);
+    color: var(--gold-ink);
+    transition: border-color 0.45s var(--ease-out);
+  }
+  .row:hover .mark {
+    border-color: var(--gold);
+  }
+  .name {
+    grid-area: name;
+    font-family: var(--font-display);
+    font-stretch: 112%;
+    font-weight: 470;
+    font-size: var(--step-2);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    padding-top: 0.5rem;
+  }
+  .desc {
+    grid-area: desc;
+    color: var(--ash);
+    line-height: 1.6;
+    max-width: 52ch;
+    padding-top: 0.55rem;
+  }
+  .tags {
+    grid-area: tags;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .tag {
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--radius-pill);
+    background: rgb(237 237 243 / 0.06);
+    color: var(--ash);
+    font-size: 0.8125rem;
+    line-height: 1.2;
+  }
+  .go {
+    grid-area: go;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    margin-top: 0.2rem;
+    border-radius: 50%;
+    color: var(--ash);
+    transition:
+      transform 0.45s var(--ease-out),
+      color 0.45s var(--ease-out),
+      background-color 0.45s var(--ease-out);
+  }
+  .row:hover .go {
+    color: var(--on-gold);
+    background: var(--gold);
+    transform: rotate(45deg);
+  }
+
+  @media (max-width: 860px) {
+    .row {
+      grid-template-columns: 48px minmax(0, 1fr) 40px;
+      grid-template-areas:
+        'mark name go'
+        'desc desc desc'
+        'tags tags tags';
+      row-gap: 0.9rem;
+      padding-inline: 0.25rem;
+    }
+    .mark {
+      width: 46px;
+      height: 46px;
+    }
+    .name {
+      padding-top: 0.55rem;
+    }
+    .desc {
+      padding-top: 0;
+    }
+    .go {
+      width: 40px;
+      height: 40px;
+    }
+  }
+</style>

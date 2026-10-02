@@ -1,0 +1,190 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+import type { Lang } from '../data/services';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+type Block = [string, string, string[]?];
+
+const copy = {
+  es: {
+    title: 'Política de Privacidad · MG Tax Maker LLC',
+    h1: 'Política de Privacidad',
+    updated: 'Última actualización: Junio 2026',
+    intro:
+      'En MG Tax Maker LLC ("nosotros", "nuestro" o "la Empresa") valoramos y respetamos tu privacidad. Esta Política de Privacidad explica cómo recopilamos, usamos, protegemos y compartimos tu información personal cuando visitas nuestro sitio web mgtaxmakerllc.com o utilizas nuestros servicios.',
+    blocks: [
+      ['Información que Recopilamos', 'Podemos recopilar los siguientes tipos de información:', [
+        'Información de contacto: nombre, dirección de correo electrónico, número de teléfono.',
+        'Información del servicio: el tipo de servicio que solicitas y detalles relacionados con tu situación financiera o empresarial.',
+        'Documentos fiscales y financieros: que nos proporcionas voluntariamente para prestar nuestros servicios (W-2, 1099, identificaciones, etc.).',
+        'Información técnica: dirección IP, tipo de navegador y datos de uso del sitio mediante cookies.',
+      ]],
+      ['Cómo Usamos tu Información', 'Utilizamos tu información para:', [
+        'Prestar los servicios de contabilidad, preparación de impuestos, reparación de crédito y formación de empresas que solicitas.',
+        'Comunicarnos contigo sobre tu cita, servicio o consultas.',
+        'Cumplir con obligaciones legales y regulatorias (incluidas las del IRS).',
+        'Mejorar nuestro sitio web y servicios.',
+      ]],
+      ['Protección de tu Información', 'Tomamos la seguridad de tu información muy en serio. Implementamos medidas técnicas y organizativas razonables para proteger tus datos personales contra el acceso, uso o divulgación no autorizados. La información fiscal y financiera sensible se maneja con estricta confidencialidad conforme a las normas profesionales aplicables.'],
+      ['Cómo Compartimos tu Información', 'No vendemos tu información personal. Solo compartimos tu información en las siguientes circunstancias:', [
+        'Con autoridades gubernamentales cuando lo exige la ley (por ejemplo, presentación de declaraciones ante el IRS).',
+        'Con proveedores de servicios de confianza que nos ayudan a operar (por ejemplo, software de preparación de impuestos), bajo acuerdos de confidencialidad.',
+        'Con tu consentimiento expreso.',
+      ]],
+      ['Cookies', 'Nuestro sitio web puede usar cookies y tecnologías similares para mejorar tu experiencia y analizar el tráfico. Puedes configurar tu navegador para rechazar las cookies, aunque esto podría afectar algunas funciones del sitio.'],
+      ['Tus Derechos', 'Tienes derecho a acceder, corregir o solicitar la eliminación de tu información personal. Para ejercer estos derechos, contáctanos usando la información al final de esta página.'],
+      ['Enlaces a Terceros', 'Nuestro sitio puede contener enlaces a redes sociales y otros sitios externos (Facebook, Instagram, TikTok, Google). No somos responsables de las prácticas de privacidad de esos sitios. Te recomendamos revisar sus respectivas políticas.'],
+      ['Cambios a esta Política', 'Podemos actualizar esta Política de Privacidad ocasionalmente. La fecha de "Última actualización" en la parte superior indica cuándo se revisó por última vez. Te recomendamos revisar esta página periódicamente.'],
+      ['Aviso Legal', 'La información de este sitio web tiene fines informativos generales y no constituye asesoría legal, fiscal o financiera específica. Cada situación es única; te recomendamos agendar una consulta para recibir orientación personalizada.'],
+    ] as Block[],
+    questions: '¿Preguntas sobre tu privacidad?',
+    contactUs: 'Contáctanos en cualquier momento:',
+  },
+  en: {
+    title: 'Privacy Policy · MG Tax Maker LLC',
+    h1: 'Privacy Policy',
+    updated: 'Last updated: June 2026',
+    intro:
+      'At MG Tax Maker LLC ("we", "our", or "the Company"), we value and respect your privacy. This Privacy Policy explains how we collect, use, protect, and share your personal information when you visit our website mgtaxmakerllc.com or use our services.',
+    blocks: [
+      ['Information We Collect', 'We may collect the following types of information:', [
+        'Contact information: name, email address, phone number.',
+        'Service information: the type of service you request and details related to your financial or business situation.',
+        'Tax and financial documents: that you voluntarily provide to us to deliver our services (W-2, 1099, IDs, etc.).',
+        'Technical information: IP address, browser type, and site usage data through cookies.',
+      ]],
+      ['How We Use Your Information', 'We use your information to:', [
+        'Provide the bookkeeping, tax preparation, credit repair, and business formation services you request.',
+        'Communicate with you about your appointment, service, or inquiries.',
+        'Comply with legal and regulatory obligations (including IRS requirements).',
+        'Improve our website and services.',
+      ]],
+      ['Protecting Your Information', 'We take the security of your information very seriously. We implement reasonable technical and organizational measures to protect your personal data against unauthorized access, use, or disclosure. Sensitive tax and financial information is handled with strict confidentiality in accordance with applicable professional standards.'],
+      ['How We Share Your Information', 'We do not sell your personal information. We only share your information in the following circumstances:', [
+        'With government authorities when required by law (e.g., filing returns with the IRS).',
+        'With trusted service providers who help us operate (e.g., tax preparation software), under confidentiality agreements.',
+        'With your express consent.',
+      ]],
+      ['Cookies', 'Our website may use cookies and similar technologies to enhance your experience and analyze traffic. You can configure your browser to reject cookies, though this may affect some site features.'],
+      ['Your Rights', 'You have the right to access, correct, or request deletion of your personal information. To exercise these rights, contact us using the information at the bottom of this page.'],
+      ['Third-Party Links', 'Our site may contain links to social media and other external sites (Facebook, Instagram, TikTok, Google). We are not responsible for the privacy practices of those sites. We encourage you to review their respective policies.'],
+      ['Changes to This Policy', 'We may update this Privacy Policy occasionally. The "Last updated" date at the top indicates when it was last revised. We encourage you to review this page periodically.'],
+      ['Legal Disclaimer', 'The information on this website is for general informational purposes and does not constitute specific legal, tax, or financial advice. Each situation is unique; we recommend scheduling a consultation for personalized guidance.'],
+    ] as Block[],
+    questions: 'Questions about your privacy?',
+    contactUs: 'Contact us anytime:',
+  },
+}[lang];
+---
+
+<Base lang={lang} alternate={lang === 'es' ? '/en/privacy/' : '/privacidad/'} title={copy.title} description={copy.intro.slice(0, 155)}>
+  <article class="doc wrap">
+    <header>
+      <h1>{copy.h1}</h1>
+      <p class="updated">{copy.updated}</p>
+      <p class="intro">{copy.intro}</p>
+    </header>
+
+    <ol class="blocks">
+      {
+        copy.blocks.map(([title, text, list]) => (
+          <li>
+            <h2>{title}</h2>
+            <p>{text}</p>
+            {list && (
+              <ul>
+                {list.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))
+      }
+    </ol>
+
+    <aside class="contact card">
+      <h2>{copy.questions}</h2>
+      <p>{copy.contactUs}</p>
+      <p>
+        MG Tax Maker LLC · Kentucky, USA<br />
+        <a href={`mailto:${site.email}`}>{site.email}</a> · <a href={site.phoneHref}>{site.phone}</a>
+      </p>
+    </aside>
+  </article>
+</Base>
+
+<style>
+  .doc {
+    max-width: calc(46rem + var(--gutter) * 2);
+    padding-top: clamp(8rem, 6rem + 5vw, 10rem);
+    padding-bottom: var(--space-section);
+  }
+  h1 {
+    font-size: var(--step-4);
+    letter-spacing: -0.02em;
+  }
+  .updated {
+    margin-top: 1rem;
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+  .intro {
+    margin-top: 2rem;
+    color: var(--ivory);
+    font-size: var(--step-1);
+    line-height: 1.6;
+  }
+  .blocks {
+    margin: 3.5rem 0 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: block;
+  }
+  .blocks > li {
+    counter-increment: block;
+    padding: 2rem 0;
+    border-top: 1px solid var(--line);
+  }
+  h2 {
+    font-size: var(--step-2);
+  }
+  .blocks h2::before {
+    content: counter(block, decimal-leading-zero);
+    display: inline-block;
+    min-width: 2.75rem;
+    color: var(--gold-ink);
+    font-size: 0.9em;
+  }
+  .blocks p,
+  .blocks ul {
+    margin-top: 1rem;
+    color: var(--ash);
+    line-height: 1.7;
+  }
+  .blocks ul {
+    padding-left: 1.25rem;
+    display: grid;
+    gap: 0.5rem;
+  }
+  .blocks ul li::marker {
+    color: var(--gold);
+  }
+  .contact {
+    margin-top: 2rem;
+    padding: clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem);
+  }
+  .contact p {
+    margin-top: 0.75rem;
+    color: var(--ash);
+    line-height: 1.7;
+  }
+  .contact a {
+    color: var(--ivory);
+  }
+</style>

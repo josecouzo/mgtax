@@ -1,0 +1,174 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import photo from '../assets/louisville-night-graded.jpg';
+import { ui } from '../i18n/ui';
+import { href, site } from '../data/site';
+import type { Lang } from '../data/services';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = ui[lang].contact;
+const home = lang === 'es' ? '/' : '/en/';
+const channels = [
+  { icon: 'phone', label: t.phone, value: site.phone, href: site.phoneHref },
+  { icon: 'whatsapp', brand: true, label: t.whatsapp, value: t.whatsappSub, href: site.whatsappMsg[lang] },
+  { icon: 'mail', label: t.email, value: site.email, href: `mailto:${site.email}` },
+  { icon: 'clock', label: t.hours, value: t.hoursValue },
+  { icon: 'map-pin', label: t.where, value: t.whereValue },
+];
+---
+
+<section class="contact" id="contact" aria-labelledby="contact-title" data-mbar-hide>
+  <div class="media" aria-hidden="true">
+    <Image src={photo} alt="" widths={[640, 1280, 1600]} sizes="100vw" class="photo" loading="lazy" />
+  </div>
+  <div class="veil" aria-hidden="true"></div>
+
+  <div class="wrap inner">
+    <div class="close">
+      <h2 id="contact-title">{t.title}</h2>
+      <p>{t.sub}</p>
+      <a class="btn btn-gold" href={href(`${home}#book`)}>
+        {t.cta}
+        <Icon name="arrow-right" size={18} class="icon-arrow" />
+      </a>
+    </div>
+
+    <div class="channels glass">
+      <h3>{t.channelsTitle}</h3>
+      <p class="channels-sub">{t.channelsSub}</p>
+      <ul role="list">
+        {
+          channels.map((c) => {
+            const Tag = c.href ? 'a' : 'div';
+            return (
+              <li>
+                <Tag class="ch" {...(c.href ? { href: c.href, ...(c.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {}) } : {})}>
+                  <span class="ch-icon">
+                    <Icon name={c.icon} brand={c.brand} size={18} />
+                  </span>
+                  <span class="ch-text">
+                    <span class="ch-label">{c.label}</span>
+                    <span class="ch-value">{c.value}</span>
+                  </span>
+                </Tag>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding-block: var(--space-section);
+  }
+  .media {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+  .photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 85%;
+  }
+  .veil {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(180deg, var(--canvas) 0%, rgb(12 17 29 / 0.7) 30%, rgb(12 17 29 / 0.55) 70%, var(--canvas-deep) 100%);
+  }
+  .inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: clamp(2.5rem, 2rem + 4vw, 6rem);
+    align-items: center;
+  }
+  .close h2 {
+    font-size: var(--step-4);
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+  .close p {
+    margin-top: 1.25rem;
+    color: var(--ash);
+    font-size: var(--step-1);
+  }
+  .close .btn {
+    margin-top: 2rem;
+    --h: 56px;
+  }
+  .channels {
+    padding: clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem);
+    border-radius: 24px;
+  }
+  h3 {
+    font-size: var(--step-2);
+  }
+  .channels-sub {
+    margin-top: 0.6rem;
+    color: var(--ash);
+    font-size: 0.9375rem;
+  }
+  ul {
+    list-style: none;
+    margin: 1.25rem 0 0;
+    padding: 0;
+  }
+  li + li {
+    border-top: 1px solid var(--line);
+  }
+  .ch {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.85rem 0;
+    min-height: 56px;
+    text-decoration: none;
+  }
+  a.ch:hover .ch-value {
+    color: var(--gold-ink);
+  }
+  .ch-icon {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    flex: none;
+    border-radius: 50%;
+    background: rgb(237 237 243 / 0.08);
+    color: var(--gold-ink);
+  }
+  .ch-text {
+    display: grid;
+    gap: 0.1rem;
+    min-width: 0;
+  }
+  .ch-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .ch-value {
+    color: var(--ivory);
+    overflow-wrap: anywhere;
+    transition: color 0.25s var(--ease-out);
+  }
+  @media (max-width: 900px) {
+    .inner {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-02T15:10:00-04:00",
+  "title": "Design System: MG Tax Maker LLC",
+  "extensions": {
+    "colorMeta": {
+      "canvas": { "role": "neutral", "displayName": "Blue-Hour Onyx", "tonalRamp": ["#05070c", "#080b14", "#0c111d", "#131a2a", "#1b2337", "#2a3550", "#56607a", "#a7adbf"] },
+      "canvas-deep": { "role": "neutral", "displayName": "Midnight" },
+      "graphite": { "role": "neutral", "displayName": "Graphite" },
+      "obsidian": { "role": "neutral", "displayName": "Obsidian" },
+      "ivory": { "role": "neutral", "displayName": "Ivory" },
+      "ash": { "role": "neutral", "displayName": "Ash" },
+      "muted": { "role": "neutral", "displayName": "Fog" },
+      "gold": { "role": "primary", "displayName": "Lion Gold", "tonalRamp": ["#2b2114", "#4a3a22", "#6e5734", "#93754a", "#b2905d", "#c9a874", "#dcc296", "#efe2c8"] },
+      "gold-hi": { "role": "primary", "displayName": "Lamplight Gold" },
+      "gold-ink": { "role": "primary", "displayName": "Gilded Ink" },
+      "brand-navy": { "role": "neutral", "displayName": "Brand Navy" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero headline only; second line set in Ash." },
+      "headline": { "displayName": "Headline", "purpose": "Section titles." },
+      "title": { "displayName": "Title", "purpose": "Service names, panel titles." },
+      "body": { "displayName": "Body", "purpose": "All reading text." },
+      "body-lg": { "displayName": "Body Large", "purpose": "Section subtitles, hero subcopy." },
+      "label": { "displayName": "Label", "purpose": "Controls, chips, meta lines." }
+    },
+    "shadows": [
+      { "name": "glass", "value": "inset 0 1px 0 rgb(255 255 255 / 0.07), 0 24px 60px -24px rgb(0 0 0 / 0.6)", "purpose": "Only on frosted glass surfaces floating over light." },
+      { "name": "segment-raised", "value": "inset 0 1px 0 rgb(255 255 255 / 0.12), 0 6px 16px -8px rgb(0 0 0 / 0.6)", "purpose": "Selected option in a segmented control." }
+    ],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "All state transitions and entrances." },
+      { "name": "hero-settle", "value": "2.4s ease-out scale(1.08)→1 + brightness", "purpose": "The one authored load moment: the city photo settles; headline lines rise from 8px blur." },
+      { "name": "check-draw", "value": "0.4s stroke-dashoffset 24→0", "purpose": "Checklist check stroke." },
+      { "name": "process-draw", "value": "1.6s scaleX/scaleY 0→1", "purpose": "Process line draws once on entering view." }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "760px" },
+      { "name": "stack", "value": "900px" },
+      { "name": "process-vertical", "value": "960px" },
+      { "name": "nav-collapse", "value": "1080px" }
+    ],
+    "glass": { "background": "rgb(16 22 37 / 0.58)", "backdropFilter": "blur(22px) saturate(150%)", "border": "1px solid rgb(255 255 255 / 0.09)", "fallback": "rgb(16 22 37 / 0.78)" }
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single gold action: book a free consultation.",
+      "html": "<a class=\"ds-btn-gold\" href=\"#\">Agendar consulta gratis <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\"><path d=\"M5 12h14M12 5l7 7-7 7\"/></svg></a>",
+      "css": ".ds-btn-gold{display:inline-flex;align-items:center;gap:.6rem;min-height:52px;padding:0 1.5rem;border-radius:999px;background:#b2905d;color:#0c111d;font:600 1rem/1 'Inter Variable',Inter,system-ui,sans-serif;text-decoration:none;transition:background-color .25s cubic-bezier(.16,1,.3,1),transform .25s cubic-bezier(.16,1,.3,1)}.ds-btn-gold:hover{background:#c9a874}.ds-btn-gold:hover svg{transform:translateX(3px)}.ds-btn-gold svg{transition:transform .35s cubic-bezier(.16,1,.3,1)}.ds-btn-gold:active{transform:scale(.97)}.ds-btn-gold:focus-visible{outline:2px solid #c9a874;outline-offset:3px}"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary action on dark or photographic ground.",
+      "html": "<a class=\"ds-btn-ghost\" href=\"#\">WhatsApp</a>",
+      "css": ".ds-btn-ghost{display:inline-flex;align-items:center;min-height:52px;padding:0 1.5rem;border-radius:999px;border:1px solid rgb(237 237 243/.5);color:#ededf3;font:500 1rem/1 'Inter Variable',Inter,system-ui,sans-serif;text-decoration:none;transition:border-color .25s,background-color .25s}.ds-btn-ghost:hover{border-color:#ededf3;background:rgb(237 237 243/.06)}.ds-btn-ghost:focus-visible{outline:2px solid #c9a874;outline-offset:3px}"
+    },
+    {
+      "name": "Segmented Control",
+      "kind": "custom",
+      "description": "Recessed track with pill options; the selected option rises.",
+      "html": "<div class=\"ds-seg\"><button class=\"on\">Taxes</button><button>Contabilidad</button><button>Crédito</button></div>",
+      "css": ".ds-seg{display:inline-grid;grid-auto-flow:column;gap:4px;padding:4px;border-radius:999px;background:rgb(4 7 14/.45)}.ds-seg button{min-height:46px;padding:0 1rem;border:0;border-radius:999px;background:transparent;color:#b9bdcc;font:500 .9375rem 'Inter Variable',Inter,system-ui,sans-serif;cursor:pointer;transition:background-color .35s,color .35s}.ds-seg button:hover{color:#ededf3}.ds-seg .on{background:rgb(237 237 243/.13);color:#ededf3;box-shadow:inset 0 1px 0 rgb(255 255 255/.12),0 6px 16px -8px rgb(0 0 0/.6)}"
+    },
+    {
+      "name": "Graphite Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Flat resting surface, one tonal step above the canvas.",
+      "html": "<article class=\"ds-card\"><h3>Para tu negocio</h3><p>Bookkeeping y conciliaciones mensuales.</p></article>",
+      "css": ".ds-card{background:#131a2a;border-radius:14px;padding:2rem;color:#ededf3}.ds-card h3{margin:0;font:480 1.75rem/1.12 'Archivo Variable',Archivo,sans-serif;font-stretch:112%}.ds-card p{margin:.75rem 0 0;color:#b9bdcc;font:400 1rem/1.55 'Inter Variable',Inter,sans-serif}"
+    },
+    {
+      "name": "Glass Panel",
+      "kind": "card",
+      "description": "Frosted surface that floats over the photo or a light field.",
+      "html": "<div class=\"ds-glass\">Documentos que necesitas traer</div>",
+      "css": ".ds-glass{padding:1.5rem;border-radius:22px;background:rgb(16 22 37/.58);-webkit-backdrop-filter:blur(22px) saturate(150%);backdrop-filter:blur(22px) saturate(150%);border:1px solid rgb(255 255 255/.09);box-shadow:inset 0 1px 0 rgb(255 255 255/.07),0 24px 60px -24px rgb(0 0 0/.6);color:#ededf3;font:480 1.125rem 'Archivo Variable',Archivo,sans-serif}"
+    },
+    {
+      "name": "Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "What a service includes, under its row.",
+      "html": "<span class=\"ds-chip\">Declaraciones firmadas con PTIN</span>",
+      "css": ".ds-chip{display:inline-block;padding:.4rem .8rem;border-radius:999px;background:rgb(237 237 243/.06);color:#b9bdcc;font:400 .8125rem/1.2 'Inter Variable',Inter,sans-serif}"
+    },
+    {
+      "name": "Checklist Item",
+      "kind": "custom",
+      "description": "Signature checkbox: fills gold and draws its check.",
+      "html": "<label class=\"ds-check\"><input type=\"checkbox\" checked><span class=\"box\"><svg viewBox=\"0 0 24 24\"><path d=\"M5 12.5l4.2 4.2L19 7.5\"/></svg></span>Formularios W-2 y/o 1099</label>",
+      "css": ".ds-check{display:flex;gap:.85rem;align-items:center;color:#ededf3;font:400 .9375rem 'Inter Variable',Inter,sans-serif;cursor:pointer}.ds-check input{position:absolute;opacity:0}.ds-check .box{display:grid;place-items:center;width:24px;height:24px;border-radius:7px;border:1.5px solid rgb(237 237 243/.22);transition:background-color .3s,border-color .3s}.ds-check svg{width:16px;height:16px;fill:none;stroke:#0c111d;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24;stroke-dashoffset:24;transition:stroke-dashoffset .4s cubic-bezier(.16,1,.3,1)}.ds-check input:checked+.box{background:#b2905d;border-color:#b2905d}.ds-check input:checked+.box svg{stroke-dashoffset:0}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Louisville at Blue Hour",
+    "overview": "The site is a night view of the city the firm serves: Louisville's skyline over the Ohio River, with warm lights in the water. Everything that floats above that scene is frosted glass. Below the hero, the photograph gives way to a calm, navy-tinted onyx ground. Faint gold and blue fields of light carry the atmosphere down the page, the way city light lingers in a night sky. The system descends from the Mercury style reference (`design/reference-mercury.md`). It keeps Mercury's monochrome discipline, graphite surfaces, pill controls and intermediate-weight wide display type. Mercury's cobalt is replaced by the brand's own gold, taken from the lion mark.",
+    "keyCharacteristics": [
+      "Dark world chosen on purpose: a premium, after-hours feel, with high-contrast ivory type.",
+      "One chromatic voice: brand gold, reserved for the action of booking.",
+      "Glass only where something floats over light (nav on scroll, hero console, checklist, contact panel, mobile action bar).",
+      "Wide Archivo display at weight 470–480 (`wdth` 112); Inter for everything read.",
+      "Real imagery only: the city at night and the founder's portrait, never illustrations or stock handshakes."
+    ],
+    "rules": [
+      { "name": "The One Gold Voice Rule", "body": "Gold fills only the booking action and the states that confirm progress toward it (checked boxes, progress). It is never decoration, never a section background. Keep at least 32px between two gold fills.", "section": "colors" },
+      { "name": "The Tinted Night Rule", "body": "Every neutral leans toward navy. A neutral gray (`#888`, `#222`) on this page is a bug.", "section": "colors" },
+      { "name": "The Never-Bold Rule", "body": "Display and headings stay at 460–480. Emphasis comes from size and the wide axis, never weight 700.", "section": "typography" },
+      { "name": "The No-Eyebrow Rule", "body": "No kicker labels above headings; the heading speaks for itself.", "section": "typography" },
+      { "name": "The Glass Has a Reason Rule", "body": "Glass (`blur(22px) saturate(150%)` over `rgb(16 22 37 / .58)`) is used only on an element that floats over something luminous: the photo, a light field, or scrolled content. Glass on a flat, empty background is decoration and is not allowed. Without `backdrop-filter` support, glass falls back to a solid 78% fill.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep gold for the booking action and its confirmations only.",
+      "Do use the real city photo or the founder portrait when imagery is needed; color-grade any new night photo toward navy (pull magenta skies to blue, keep warm lights).",
+      "Do draw icons from Lucide (UI, 1.75 stroke) or Simple Icons (brands). Never emoji.",
+      "Do test every change at 390, 768, 1024 and 1440px. The hero's booking button must stay in the mobile first viewport.",
+      "Do theme browser surfaces: gold selection, gold focus ring, dark scrollbar."
+    ],
+    "donts": [
+      "Don't add a second accent color or use cobalt from the Mercury reference.",
+      "Don't set headings in bold (700+) or add eyebrow labels above them.",
+      "Don't put glass on a flat background, or drop shadows on resting cards.",
+      "Don't build sections as rows of identical icon + heading + text cards.",
+      "Don't use pure white (`#fff`) for body text, or neutral grays without navy tint.",
+      "Don't show testimonials, ratings, client counts or credentials that are not confirmed by the client."
+    ]
+  }
+}

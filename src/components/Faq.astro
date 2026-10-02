@@ -1,0 +1,127 @@
+---
+import Icon from './Icon.astro';
+import { ui } from '../i18n/ui';
+import type { Lang } from '../data/services';
+
+interface Props {
+  lang: Lang;
+  /** Subset of FAQ indices (service pages); all when omitted. */
+  only?: number[];
+  title?: string;
+  id?: string;
+}
+const { lang, only, title, id = 'faq' } = Astro.props;
+const t = ui[lang].faq;
+const items = only ? only.map((i) => t.items[i]) : t.items;
+---
+
+<section class="section tight faq" id={id} aria-labelledby={`${id}-title`}>
+  <div class="wrap grid">
+    <h2 id={`${id}-title`}>{title ?? t.title}</h2>
+    <div class="list">
+      {
+        items.map(([q, a], i) => (
+          <details name={`${id}-acc`} open={i === 0}>
+            <summary>
+              <span>{q}</span>
+              <span class="toggle" aria-hidden="true">
+                <Icon name="plus" size={18} />
+              </span>
+            </summary>
+            <div class="answer">
+              <p>{a}</p>
+            </div>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: clamp(2rem, 1.5rem + 4vw, 6rem);
+    align-items: start;
+  }
+  h2 {
+    font-size: var(--step-3);
+    position: sticky;
+    top: 110px;
+  }
+  .list {
+    border-top: 1px solid var(--line);
+  }
+  details {
+    border-bottom: 1px solid var(--line);
+  }
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.4rem 0;
+    min-height: 64px;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-display);
+    font-stretch: 106%;
+    font-weight: 460;
+    font-size: var(--step-1);
+    line-height: 1.35;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  summary:hover .toggle {
+    border-color: var(--gold);
+  }
+  .toggle {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--line-strong);
+    color: var(--gold-ink);
+    transition:
+      transform 0.4s var(--ease-out),
+      border-color 0.3s var(--ease-out),
+      background-color 0.3s var(--ease-out);
+  }
+  details[open] .toggle {
+    transform: rotate(45deg);
+    background: rgb(178 144 93 / 0.14);
+    border-color: transparent;
+  }
+  .answer {
+    padding: 0 3.5rem 1.6rem 0;
+  }
+  .answer p {
+    color: var(--ash);
+    line-height: 1.7;
+    max-width: 62ch;
+  }
+  details[open] .answer {
+    animation: open 0.45s var(--ease-out);
+  }
+  @keyframes open {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+  @media (max-width: 860px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+    h2 {
+      position: static;
+    }
+    .answer {
+      padding-right: 0;
+    }
+  }
+</style>

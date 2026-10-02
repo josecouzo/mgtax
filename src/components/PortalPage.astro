@@ -1,0 +1,351 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+import type { Lang } from '../data/services';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+const copy = {
+  es: {
+    title: 'Portal de Clientes · MG Tax Maker LLC',
+    desc: 'Accede a tus documentos de taxes, reportes financieros, información de crédito y pagos en tu carpeta privada.',
+    h1: 'Tu información, segura y accesible',
+    lede: 'Accede a tus documentos de taxes, reportes financieros, estados de cuenta, información de crédito y pagos pendientes — todo en un solo lugar, las 24 horas del día.',
+    access: 'Acceder con Google',
+    private: 'Tu acceso es individual y privado. Solo tú puedes ver tus documentos.',
+    insideTitle: 'Todo lo que necesitas, organizado',
+    insideSub: 'Tu carpeta personal contiene toda tu información histórica y actual, accesible en cualquier momento.',
+    inside: [
+      ['file-text', 'Documentos de Taxes', 'Tus declaraciones de impuestos de años anteriores, formularios W-2, 1099 y todos los documentos relacionados con tus taxes federales.'],
+      ['chart-no-axes-combined', 'Estados Financieros', 'Reportes mensuales de Profit & Loss, Balance Sheets, conciliaciones bancarias y estados de cuenta de tu negocio.'],
+      ['credit-card', 'Reportes de Crédito', 'Análisis de tu reporte crediticio, disputas activas con los burós y seguimiento de tu progreso de reparación.'],
+      ['landmark', 'Documentos de Empresa', 'Operating Agreement, Articles of Organization, carta del EIN, licencias estatales y permisos de tu LLC o Corp.'],
+      ['receipt', 'Facturas y Pagos', 'Tus facturas pendientes, historial de pagos realizados y recibos.'],
+      ['message-circle', 'Comunicación Directa', 'Comenta directamente en los documentos, haz preguntas y recibe respuestas sin perder hilos importantes.'],
+    ],
+    stepsTitle: 'Acceso en 3 simples pasos',
+    steps: [
+      ['Recibes tu invitación', 'Cuando te haces cliente, recibes un email de Google Drive invitándote a tu carpeta personal y privada.'],
+      ['Inicias sesión con Google', 'Accedes con tu cuenta de Gmail. Solo tú podrás ver tu información. Sin contraseñas adicionales.'],
+      ['Accede 24/7', 'Desde tu computadora o celular, revisa documentos y descarga reportes cuando quieras.'],
+    ],
+    payTitle: 'Métodos de pago',
+    paySub: 'Elige la opción más conveniente para ti.',
+    pay: [
+      ['credit-card', 'Tarjeta de Crédito/Débito', 'Pago seguro con Visa, Mastercard, Amex y Discover. Te enviamos tu link de pago.', 'Solicitar link de pago', `${site.whatsapp}?text=Hola%2C%20quisiera%20mi%20link%20de%20pago%20con%20tarjeta`],
+      ['zap', 'Zelle', 'Envía tu pago directamente desde tu app bancaria. Sin comisiones.', 'Ver instrucciones', `mailto:${site.email}?subject=Pago%20por%20Zelle`],
+      ['banknote', 'Efectivo o Cheque', 'Paga directamente en nuestra oficina o coordina la entrega. Cheques a nombre de MG Tax Maker LLC.', 'Coordinar por WhatsApp', `${site.whatsapp}?text=Hola%2C%20me%20gustar%C3%ADa%20coordinar%20un%20pago%20en%20persona`],
+    ],
+    helpTitle: '¿Necesitas ayuda?',
+    helpSub: 'Si no recibiste tu invitación o tienes problemas accediendo, contáctanos.',
+    call: 'Llamar',
+  },
+  en: {
+    title: 'Client Portal · MG Tax Maker LLC',
+    desc: 'Access your tax documents, financial reports, credit information and payments in your private folder.',
+    h1: 'Your information, secure and accessible',
+    lede: 'Access your tax documents, financial reports, statements, credit information, and pending payments — all in one place, 24 hours a day.',
+    access: 'Sign in with Google',
+    private: 'Your access is individual and private. Only you can see your documents.',
+    insideTitle: 'Everything you need, organized',
+    insideSub: 'Your personal folder contains all your historical and current information, accessible anytime.',
+    inside: [
+      ['file-text', 'Tax Documents', 'Your previous tax returns, W-2 forms, 1099s, and all documents related to your federal taxes.'],
+      ['chart-no-axes-combined', 'Financial Statements', 'Monthly Profit & Loss reports, Balance Sheets, bank reconciliations, and business account statements.'],
+      ['credit-card', 'Credit Reports', 'Analysis of your credit report, active disputes with bureaus, and tracking of your repair progress.'],
+      ['landmark', 'Business Documents', 'Operating Agreement, Articles of Organization, EIN letter, state licenses, and permits for your LLC or Corp.'],
+      ['receipt', 'Invoices and Payments', 'Your pending invoices, payment history, and receipts.'],
+      ['message-circle', 'Direct Communication', 'Comment directly on documents, ask questions, and receive answers without losing important threads.'],
+    ],
+    stepsTitle: 'Access in 3 simple steps',
+    steps: [
+      ['Receive your invitation', 'When you become a client, you receive a Google Drive email inviting you to your personal and private folder.'],
+      ['Sign in with Google', 'Sign in with your Gmail account. Only you can see your information. No additional passwords.'],
+      ['Access 24/7', 'From your computer or phone, review documents and download reports whenever you want.'],
+    ],
+    payTitle: 'Payment methods',
+    paySub: 'Choose the most convenient option for you.',
+    pay: [
+      ['credit-card', 'Credit/Debit Card', 'Secure payment with Visa, Mastercard, Amex, and Discover. We send you your payment link.', 'Request payment link', `${site.whatsapp}?text=Hi%2C%20I%20would%20like%20my%20card%20payment%20link`],
+      ['zap', 'Zelle', 'Send payment directly from your banking app. No fees.', 'View instructions', `mailto:${site.email}?subject=Zelle%20payment`],
+      ['banknote', 'Cash or Check', 'Pay directly at our office or coordinate delivery. Checks payable to MG Tax Maker LLC.', 'Coordinate via WhatsApp', `${site.whatsapp}?text=Hi%2C%20I%20would%20like%20to%20coordinate%20an%20in-person%20payment`],
+    ],
+    helpTitle: 'Need help?',
+    helpSub: "If you haven't received your invitation or are having trouble accessing, contact us.",
+    call: 'Call',
+  },
+}[lang];
+---
+
+<Base lang={lang} alternate={lang === 'es' ? '/en/portal/' : '/portal/'} title={copy.title} description={copy.desc}>
+  <section class="intro" data-hero>
+    <div class="ambient" style="--glow-gold-top: -10%; --glow-gold-left: 30%; --glow-blue-top: 0%; --glow-blue-right: -10%;" aria-hidden="true"></div>
+    <div class="wrap inner">
+      <span class="badge"><Icon name="folder-lock" size={26} /></span>
+      <h1>{copy.h1}</h1>
+      <p class="lede">{copy.lede}</p>
+      <a class="btn btn-gold" href="https://drive.google.com" target="_blank" rel="noopener">
+        <Icon name="google" brand size={17} />
+        {copy.access}
+        <Icon name="arrow-up-right" size={17} />
+      </a>
+      <p class="private"><Icon name="lock" size={15} />{copy.private}</p>
+    </div>
+  </section>
+
+  <section class="section inside" aria-labelledby="inside-title">
+    <div class="wrap">
+      <header class="section-head">
+        <h2 id="inside-title">{copy.insideTitle}</h2>
+        <p>{copy.insideSub}</p>
+      </header>
+      <ul class="inside-grid" role="list">
+        {
+          copy.inside.map(([icon, title, text]) => (
+            <li>
+              <Icon name={icon} size={22} />
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section steps-sec" aria-labelledby="steps-title">
+    <div class="wrap">
+      <h2 id="steps-title" class="h2">{copy.stepsTitle}</h2>
+      <ol class="steps">
+        {
+          copy.steps.map(([title, text], i) => (
+            <li class="card">
+              <span class="num tabular">{i + 1}</span>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section pay" aria-labelledby="pay-title">
+    <div class="wrap">
+      <header class="section-head">
+        <h2 id="pay-title">{copy.payTitle}</h2>
+        <p>{copy.paySub}</p>
+      </header>
+      <ul class="pay-grid" role="list">
+        {
+          copy.pay.map(([icon, title, text, cta, url]) => (
+            <li class="card">
+              <span class="p-icon"><Icon name={icon} size={22} /></span>
+              <h3>{title}</h3>
+              <p>{text}</p>
+              <a class="btn btn-quiet btn-sm" href={url} target={url.startsWith('http') ? '_blank' : undefined} rel="noopener">
+                {cta}
+                <Icon name="arrow-right" size={16} class="icon-arrow" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="help glass">
+        <div>
+          <h3>{copy.helpTitle}</h3>
+          <p>{copy.helpSub}</p>
+        </div>
+        <div class="help-actions">
+          <a class="btn btn-ghost btn-sm" href={site.whatsapp} target="_blank" rel="noopener"><Icon name="whatsapp" brand size={16} />WhatsApp</a>
+          <a class="btn btn-ghost btn-sm" href={`mailto:${site.email}`}><Icon name="mail" size={16} />Email</a>
+          <a class="btn btn-ghost btn-sm" href={site.phoneHref}><Icon name="phone" size={16} />{copy.call}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .intro {
+    position: relative;
+    padding: clamp(8rem, 6rem + 6vw, 11rem) 0 clamp(3rem, 2rem + 4vw, 5rem);
+    overflow: hidden;
+    text-align: center;
+  }
+  .inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .badge {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 1px solid var(--gold);
+    color: var(--gold-ink);
+  }
+  h1 {
+    margin-top: 1.75rem;
+    font-size: var(--step-4);
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    max-width: 18ch;
+  }
+  .lede {
+    margin: 1.5rem 0 2.25rem;
+    max-width: 40rem;
+    color: var(--ash);
+    font-size: var(--step-1);
+    line-height: 1.55;
+  }
+  .intro .btn {
+    --h: 56px;
+  }
+  .private {
+    margin-top: 1rem;
+    color: var(--muted);
+    font-size: 0.8125rem;
+  }
+  .private :global(.icon),
+  .meta :global(.icon) {
+    display: inline-block;
+    vertical-align: -3px;
+    margin-right: 0.4rem;
+  }
+
+  .inside-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--line);
+  }
+  .inside-grid li {
+    padding: 2rem 2rem 2rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .inside-grid li:not(:nth-child(3n + 1)) {
+    padding-left: 2rem;
+    border-left: 1px solid var(--line);
+  }
+  .inside-grid :global(.icon) {
+    color: var(--gold-ink);
+  }
+  .inside-grid h3,
+  .steps h3,
+  .pay-grid h3 {
+    margin-top: 1.25rem;
+    font-size: var(--step-1);
+  }
+  .inside-grid p,
+  .steps p,
+  .pay-grid p {
+    margin-top: 0.6rem;
+    color: var(--ash);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+
+  .h2 {
+    font-size: var(--step-3);
+    margin-bottom: 2.5rem;
+  }
+  .steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  .steps li {
+    padding: clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem);
+  }
+  .num {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--line-strong);
+    font-family: var(--font-display);
+    font-stretch: 112%;
+    color: var(--gold-ink);
+  }
+
+  .pay-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  .pay-grid li {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem);
+  }
+  .p-icon {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: rgb(178 144 93 / 0.14);
+    color: var(--gold-ink);
+  }
+  .pay-grid .btn {
+    margin-top: auto;
+  }
+  .pay-grid p {
+    margin-bottom: 1.5rem;
+  }
+  .help {
+    margin-top: 1.5rem;
+    padding: clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem);
+    border-radius: 22px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+  .help h3 {
+    font-size: var(--step-2);
+  }
+  .help p {
+    margin-top: 0.4rem;
+    color: var(--ash);
+  }
+  .help-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  @media (max-width: 900px) {
+    .inside-grid,
+    .steps,
+    .pay-grid {
+      grid-template-columns: 1fr;
+    }
+    .inside-grid li,
+    .inside-grid li:not(:nth-child(3n + 1)) {
+      padding: 1.75rem 0;
+      border-left: 0;
+    }
+  }
+</style>

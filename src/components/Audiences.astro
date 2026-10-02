@@ -1,0 +1,119 @@
+---
+import Icon from './Icon.astro';
+import { ui } from '../i18n/ui';
+import { href } from '../data/site';
+import type { Lang } from '../data/services';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = ui[lang].audiences;
+const home = lang === 'es' ? '/' : '/en/';
+---
+
+<section class="section tight audiences" aria-labelledby="aud-title">
+  <div class="wrap">
+    <header class="section-head">
+      <h2 id="aud-title">{t.title}</h2>
+    </header>
+
+    <div class="grid">
+      {
+        t.items.map((item) => (
+          <article class="panel card">
+            <h3>{item.title}</h3>
+            <ul role="list">
+              {item.points.map((p) => (
+                <li>
+                  <Icon name="check" size={18} />
+                  <span>{p}</span>
+                </li>
+              ))}
+            </ul>
+            <a class="more" href={href(`${home}#book`)} data-pick-service={item.service}>
+              {t.cta}
+              <Icon name="arrow-right" size={18} class="icon-arrow" />
+            </a>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(1.75rem, 1.2rem + 2vw, 3rem);
+    overflow: hidden;
+  }
+  .panel::after {
+    content: '';
+    position: absolute;
+    inset: auto -20% -60% auto;
+    width: 70%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgb(178 144 93 / 0.16), transparent);
+    pointer-events: none;
+  }
+  .panel:nth-child(2)::after {
+    background: radial-gradient(closest-side, rgb(64 92 160 / 0.22), transparent);
+  }
+  h3 {
+    font-size: var(--step-3);
+  }
+  ul {
+    list-style: none;
+    margin: 1.75rem 0 2.25rem;
+    padding: 0;
+    display: grid;
+    gap: 0.95rem;
+  }
+  li {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    color: var(--ash);
+    line-height: 1.5;
+  }
+  li :global(.icon) {
+    margin-top: 0.15rem;
+    color: var(--gold-ink);
+  }
+  .more {
+    position: relative;
+    z-index: 1;
+    margin-top: auto;
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    color: var(--ivory);
+    font-weight: 500;
+    text-decoration: none;
+  }
+  .more :global(.icon) {
+    transition: transform 0.35s var(--ease-out);
+  }
+  .more:hover :global(.icon) {
+    transform: translateX(4px);
+  }
+  .more:hover {
+    color: var(--gold-ink);
+  }
+  @media (max-width: 760px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

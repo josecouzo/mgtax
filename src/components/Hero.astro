@@ -1,0 +1,342 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import photo from '../assets/louisville-night-graded.jpg';
+import { ui } from '../i18n/ui';
+import { site } from '../data/site';
+import { services, type Lang } from '../data/services';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = ui[lang].hero;
+const factIcons = ['shield-check', 'languages', 'id-card', 'map-pin'];
+---
+
+<section class="hero" data-hero aria-labelledby="hero-title">
+  <div class="media" aria-hidden="true">
+    <Image
+      src={photo}
+      alt=""
+      widths={[640, 960, 1280, 1600]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      class="photo"
+    />
+  </div>
+  <div class="veil" aria-hidden="true"></div>
+
+  <div class="content wrap">
+    <h1 id="hero-title">
+      <span class="line">{t.title[0]}</span>
+      <span class="line">{t.title[1]}</span>
+    </h1>
+    <p class="sub">{t.sub}</p>
+
+    <form class="console glass" data-console action={services[0].calendar} target="_blank">
+      <fieldset class="seg">
+        <legend class="seg-label">{t.pick}</legend>
+        <div class="seg-options">
+          {
+            services.map((s, i) => (
+              <label class="seg-opt">
+                <input
+                  type="radio"
+                  name="hero-service"
+                  value={s.id}
+                  data-calendar={s.calendar}
+                  checked={i === 0}
+                />
+                <Icon name={s.icon} size={17} />
+                <span>{s[lang].tab}</span>
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
+
+      <div class="actions">
+        <a class="btn btn-gold cta" href={services[0].calendar} target="_blank" rel="noopener" data-console-cta>
+          {t.cta}
+          <Icon name="arrow-right" size={18} class="icon-arrow" />
+        </a>
+        <a class="btn btn-ghost wa" href={site.whatsappMsg[lang]} target="_blank" rel="noopener" aria-label={t.whatsapp}>
+          <Icon name="whatsapp" brand size={18} />
+          <span class="wa-text">{t.whatsapp}</span>
+        </a>
+      </div>
+      <p class="meta"><Icon name="clock" size={15} />{t.meta}</p>
+    </form>
+  </div>
+
+  <ul class="facts wrap" role="list">
+    {
+      t.facts.map((f, i) => (
+        <li>
+          <Icon name={factIcons[i]} size={17} />
+          {f}
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<script>
+  const consoleEl = document.querySelector<HTMLFormElement>('[data-console]');
+  const cta = consoleEl?.querySelector<HTMLAnchorElement>('[data-console-cta]');
+  consoleEl?.addEventListener('change', (e) => {
+    const input = e.target as HTMLInputElement;
+    if (input.name !== 'hero-service' || !cta) return;
+    cta.href = input.dataset.calendar ?? cta.href;
+    window.dispatchEvent(new CustomEvent('mg:service', { detail: input.value }));
+  });
+</script>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 120px 0 0;
+    isolation: isolate;
+    overflow: hidden;
+  }
+  .media {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+  .photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 62% 58%;
+    animation: settle 2.4s var(--ease-out) both;
+  }
+  @keyframes settle {
+    from {
+      transform: scale(1.08);
+      filter: brightness(0.6);
+    }
+  }
+  .veil {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(180deg, rgb(12 17 29 / 0.92) 0%, rgb(12 17 29 / 0.55) 30%, rgb(12 17 29 / 0.2) 58%, rgb(12 17 29 / 0.5) 82%, var(--canvas) 100%),
+      radial-gradient(ellipse 48% 34% at 50% 40%, rgb(12 17 29 / 0.78), rgb(12 17 29 / 0.35) 60%, transparent 100%);
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  h1 {
+    font-size: clamp(2.5rem, 1.6rem + 4.3vw, 4.75rem);
+    font-weight: 470;
+    letter-spacing: -0.018em;
+    line-height: 1.04;
+    max-width: 16ch;
+  }
+  .line {
+    display: block;
+    animation: rise 1.1s var(--ease-out) both;
+  }
+  .line:nth-child(2) {
+    animation-delay: 0.12s;
+    color: var(--ash);
+  }
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(22px);
+      filter: blur(8px);
+    }
+  }
+  .sub {
+    max-width: 38rem;
+    margin-top: 1.5rem;
+    color: var(--ash);
+    font-size: var(--step-1);
+    line-height: 1.5;
+    animation: rise 1.1s var(--ease-out) 0.24s both;
+  }
+
+  .console {
+    width: min(100%, 40rem);
+    margin-top: 2.5rem;
+    padding: 0.75rem;
+    border-radius: 28px;
+    animation: rise 1.2s var(--ease-out) 0.38s both;
+  }
+  .seg {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+  }
+  .seg-label {
+    padding: 0.35rem 0 0.75rem;
+    width: 100%;
+    font-size: 0.8125rem;
+    color: var(--ash);
+    letter-spacing: 0.01em;
+  }
+  .seg-options {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+    padding: 4px;
+    border-radius: var(--radius-pill);
+    background: rgb(4 7 14 / 0.45);
+  }
+  .seg-opt {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    min-height: 46px;
+    padding: 0 0.75rem;
+    border-radius: var(--radius-pill);
+    color: var(--ash);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+      background-color 0.35s var(--ease-out),
+      color 0.35s var(--ease-out),
+      box-shadow 0.35s var(--ease-out);
+  }
+  .seg-opt input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+  .seg-opt:hover {
+    color: var(--ivory);
+  }
+  .seg-opt:has(input:checked) {
+    background: rgb(237 237 243 / 0.13);
+    color: var(--ivory);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.12),
+      0 6px 16px -8px rgb(0 0 0 / 0.6);
+  }
+  .seg-opt:has(input:checked) :global(.icon) {
+    color: var(--gold-ink);
+  }
+  .seg-opt:has(input:focus-visible) {
+    outline: 2px solid var(--gold-hi);
+    outline-offset: 2px;
+  }
+
+  .actions {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+  .actions .btn {
+    --h: 56px;
+  }
+  .meta {
+    padding: 0.85rem 0.5rem 0.35rem;
+    font-size: 0.8125rem;
+    color: var(--ash);
+    text-wrap: balance;
+  }
+  .meta :global(.icon) {
+    display: inline-block;
+    vertical-align: -3px;
+    margin-right: 0.4rem;
+  }
+
+  .facts {
+    list-style: none;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 2.25rem;
+    padding-top: clamp(3rem, 2rem + 4vh, 5.5rem);
+    padding-bottom: 2.25rem;
+    color: var(--ivory);
+    font-size: 0.875rem;
+    animation: rise 1.2s var(--ease-out) 0.6s both;
+  }
+  .facts li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .facts :global(.icon) {
+    color: var(--gold-ink);
+  }
+
+  @media (max-width: 760px) {
+    .hero {
+      justify-content: flex-start;
+      padding-top: 104px;
+    }
+    .photo {
+      object-position: 70% 60%;
+    }
+    .veil {
+      background: linear-gradient(180deg, rgb(12 17 29 / 0.9) 0%, rgb(12 17 29 / 0.6) 34%, rgb(12 17 29 / 0.35) 60%, rgb(12 17 29 / 0.7) 85%, var(--canvas) 100%);
+    }
+    h1 {
+      font-size: clamp(2.25rem, 1.3rem + 5.6vw, 3rem);
+    }
+    .sub {
+      margin-top: 1rem;
+      font-size: 1rem;
+    }
+    .console {
+      margin-top: 1.5rem;
+      border-radius: 24px;
+      padding: 0.625rem;
+    }
+    .seg-label {
+      padding: 0.25rem 0 0.6rem;
+    }
+    .seg-options {
+      grid-template-columns: 1fr 1fr;
+      border-radius: 18px;
+    }
+    .seg-opt {
+      border-radius: 14px;
+      min-height: 44px;
+    }
+    .actions .btn {
+      --h: 52px;
+    }
+    .wa {
+      width: 52px;
+      padding: 0;
+    }
+    .wa-text {
+      display: none;
+    }
+    .facts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem 1rem;
+      justify-items: start;
+      text-align: left;
+      font-size: 0.8125rem;
+      padding-top: 2.25rem;
+      padding-bottom: 1.5rem;
+    }
+  }
+</style>

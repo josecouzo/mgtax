@@ -1,0 +1,355 @@
+@import '@fontsource-variable/archivo/standard.css';
+@import '@fontsource-variable/inter';
+
+/* ---------------------------------------------------------------
+   MG Tax Maker — tokens
+   Mercury's onyx/graphite system, tinted toward the brand navy
+   (#071D38), with the brand gold as the single chromatic action.
+---------------------------------------------------------------- */
+:root {
+  color-scheme: dark;
+
+  --canvas: #0c111d;
+  --canvas-deep: #080b14;
+  --graphite: #131a2a;
+  --obsidian: #1b2337;
+  --line: rgb(237 237 243 / 0.1);
+  --line-strong: rgb(237 237 243 / 0.22);
+
+  --ivory: #ededf3;
+  --ash: #b9bdcc;
+  --muted: #8f95aa;
+
+  --gold: #b2905d;
+  --gold-hi: #c9a874;
+  --gold-ink: #dcc296;
+  --gold-glow: rgb(178 144 93 / 0.22);
+  --on-gold: #0c111d;
+
+  --navy: #071d38;
+
+  --glass: rgb(16 22 37 / 0.58);
+  --glass-strong: rgb(16 22 37 / 0.78);
+  --glass-edge: rgb(255 255 255 / 0.09);
+  --glass-blur: blur(22px) saturate(150%);
+
+  --font-display: 'Archivo Variable', 'Archivo', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --step--1: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+  --step-0: clamp(1rem, 0.97rem + 0.15vw, 1.0625rem);
+  --step-1: clamp(1.125rem, 1.08rem + 0.25vw, 1.3125rem);
+  --step-2: clamp(1.375rem, 1.25rem + 0.6vw, 1.75rem);
+  --step-3: clamp(1.75rem, 1.5rem + 1.2vw, 2.625rem);
+  --step-4: clamp(2.25rem, 1.75rem + 2.6vw, 4.25rem);
+
+  --radius-card: 14px;
+  --radius-pill: 999px;
+
+  --space-section: clamp(4.5rem, 3rem + 6vw, 8.5rem);
+  --gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+  --max: 1200px;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: 96px;
+  scrollbar-color: var(--obsidian) var(--canvas-deep);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--ivory);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  font-weight: 400;
+  line-height: 1.55;
+  font-feature-settings: 'cv11', 'ss01';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--gold);
+  color: var(--on-gold);
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+::-webkit-scrollbar-track {
+  background: var(--canvas-deep);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--obsidian);
+  border: 3px solid var(--canvas-deep);
+  border-radius: 99px;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+.icon {
+  flex: none;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 480;
+  font-stretch: 112%;
+  line-height: 1.12;
+  letter-spacing: -0.012em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+  text-underline-offset: 0.22em;
+  text-decoration-thickness: 1px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--gold-hi);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip {
+  position: fixed;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  padding: 0.75rem 1.25rem;
+  background: var(--gold);
+  color: var(--on-gold);
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  text-decoration: none;
+}
+.skip:focus {
+  top: 1rem;
+}
+
+/* ---------- layout ---------- */
+.wrap {
+  width: 100%;
+  max-width: calc(var(--max) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.section {
+  padding-block: var(--space-section);
+  position: relative;
+}
+
+/* sections that continue the previous thought sit closer to it */
+.section.tight {
+  padding-top: 0;
+}
+.section:has(+ .section.tight) {
+  padding-bottom: calc(var(--space-section) * 0.8);
+}
+
+.section-head {
+  max-width: 44rem;
+  margin-bottom: clamp(2.5rem, 2rem + 2vw, 4rem);
+}
+.section-head h2 {
+  font-size: var(--step-3);
+}
+.section-head p {
+  margin-top: 1.1rem;
+  color: var(--ash);
+  font-size: var(--step-1);
+  line-height: 1.5;
+}
+.section-head.center {
+  margin-inline: auto;
+  text-align: center;
+}
+
+/* ---------- controls ---------- */
+.btn {
+  --h: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: var(--h);
+  padding: 0 1.5rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.005em;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.25s var(--ease-out),
+    border-color 0.25s var(--ease-out),
+    color 0.25s var(--ease-out),
+    transform 0.25s var(--ease-out);
+}
+.btn:active {
+  transform: scale(0.97);
+}
+.btn .icon {
+  transition: transform 0.35s var(--ease-out);
+}
+.btn:hover .icon-arrow {
+  transform: translateX(3px);
+}
+
+.btn-gold {
+  background: var(--gold);
+  color: var(--on-gold);
+  font-weight: 600;
+}
+.btn-gold:hover {
+  background: var(--gold-hi);
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: rgb(237 237 243 / 0.5);
+  color: var(--ivory);
+}
+.btn-ghost:hover {
+  border-color: var(--ivory);
+  background: rgb(237 237 243 / 0.06);
+}
+
+.btn-quiet {
+  background: var(--obsidian);
+  color: var(--ivory);
+}
+.btn-quiet:hover {
+  background: #232c44;
+}
+
+.btn-sm {
+  --h: 42px;
+  padding: 0 1.1rem;
+  font-size: 0.9375rem;
+}
+
+/* ---------- surfaces ---------- */
+.glass {
+  background: var(--glass);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-edge);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.07),
+    0 24px 60px -24px rgb(0 0 0 / 0.6);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass {
+    background: var(--glass-strong);
+  }
+}
+
+.card {
+  background: var(--graphite);
+  border-radius: var(--radius-card);
+}
+
+/* ambient light fields — the "blue hour" atmosphere carried below the hero */
+.ambient {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 18%, #000 82%, transparent);
+  mask-image: linear-gradient(180deg, transparent, #000 18%, #000 82%, transparent);
+}
+.ambient::before,
+.ambient::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+}
+.ambient::before {
+  width: 46vw;
+  height: 46vw;
+  max-width: 640px;
+  max-height: 640px;
+  background: rgb(178 144 93 / 0.13);
+  top: var(--glow-gold-top, 10%);
+  left: var(--glow-gold-left, -12%);
+}
+.ambient::after {
+  width: 52vw;
+  height: 52vw;
+  max-width: 720px;
+  max-height: 720px;
+  background: rgb(52 78 140 / 0.2);
+  top: var(--glow-blue-top, 30%);
+  right: var(--glow-blue-right, -16%);
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}

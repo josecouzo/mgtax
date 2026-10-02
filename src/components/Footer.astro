@@ -1,0 +1,166 @@
+---
+import Icon from './Icon.astro';
+import { ui } from '../i18n/ui';
+import { href, site } from '../data/site';
+import { services, serviceHref, type Lang } from '../data/services';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = ui[lang];
+const home = lang === 'es' ? '/' : '/en/';
+const privacy = lang === 'es' ? '/privacidad/' : '/en/privacy/';
+const portal = lang === 'es' ? '/portal/' : '/en/portal/';
+---
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="top">
+      <div class="about">
+        <img src={href('/brand/lockup-h-light.png')} alt="MG Tax Maker LLC" width="200" height="60" loading="lazy" />
+        <p>{t.footer.tagline}</p>
+        <div class="social">
+          <a href={site.social.facebook} target="_blank" rel="noopener" aria-label="Facebook"><Icon name="facebook" brand size={18} /></a>
+          <a href={site.social.instagram} target="_blank" rel="noopener" aria-label="Instagram"><Icon name="instagram" brand size={18} /></a>
+          <a href={site.social.tiktok} target="_blank" rel="noopener" aria-label="TikTok"><Icon name="tiktok" brand size={18} /></a>
+          <a href={site.whatsapp} target="_blank" rel="noopener" aria-label="WhatsApp"><Icon name="whatsapp" brand size={18} /></a>
+        </div>
+      </div>
+
+      <div class="col">
+        <h3>{t.footer.services}</h3>
+        <ul>
+          {services.map((s) => <li><a href={href(serviceHref(s, lang))}>{s[lang].name}</a></li>)}
+        </ul>
+      </div>
+      <div class="col">
+        <h3>{t.footer.company}</h3>
+        <ul>
+          <li><a href={href(`${home}#about`)}>{t.nav.about}</a></li>
+          <li><a href={href(`${home}#process`)}>{t.nav.process}</a></li>
+          <li><a href={href(`${home}#book`)}>{t.nav.book}</a></li>
+          <li><a href={href(portal)}>{t.footer.portal}</a></li>
+        </ul>
+      </div>
+      <div class="col">
+        <h3>{t.footer.contact}</h3>
+        <ul>
+          <li><a href={site.phoneHref}>{site.phone}</a></li>
+          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li>{t.contact.hoursValue}</li>
+          <li>Louisville, KY</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="legal">
+      <p>© 2026 MG Tax Maker LLC. {t.footer.rights} · <a href={href(privacy)}>{t.footer.privacy}</a></p>
+      <p class="credit">
+        {t.footer.photo}: <a href={site.photoCredit.source} target="_blank" rel="noopener">{site.photoCredit.author}</a>{', '}<a href={site.photoCredit.licenseUrl} target="_blank" rel="noopener">{site.photoCredit.license}</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--canvas-deep);
+    border-top: 1px solid var(--line);
+    padding: clamp(3.5rem, 3rem + 3vw, 5.5rem) 0 calc(2rem + env(safe-area-inset-bottom));
+    color: var(--ash);
+  }
+  .top {
+    display: grid;
+    grid-template-columns: 1.4fr repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+  .about img {
+    height: 44px;
+    width: auto;
+  }
+  .about p {
+    margin-top: 1.25rem;
+    max-width: 30ch;
+    font-size: 0.9375rem;
+  }
+  .social {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+  .social a {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--line-strong);
+    color: var(--ivory);
+    transition:
+      border-color 0.25s var(--ease-out),
+      color 0.25s var(--ease-out);
+  }
+  .social a:hover {
+    border-color: var(--gold);
+    color: var(--gold-ink);
+  }
+  h3 {
+    font-family: var(--font-body);
+    font-stretch: 100%;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.65rem;
+    font-size: 0.9375rem;
+  }
+  ul a {
+    text-decoration: none;
+    color: var(--ivory);
+  }
+  ul a:hover {
+    color: var(--gold-ink);
+  }
+  .legal {
+    margin-top: 3.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem 2rem;
+    font-size: 0.8125rem;
+    color: var(--muted);
+  }
+  .legal a {
+    color: var(--ash);
+  }
+  @media (max-width: 900px) {
+    .top {
+      grid-template-columns: 1fr 1fr;
+    }
+    .about {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 760px) {
+    .footer {
+      padding-bottom: calc(6.5rem + env(safe-area-inset-bottom));
+    }
+  }
+  @media (max-width: 480px) {
+    .top {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+</style>

@@ -1,0 +1,90 @@
+---
+import Icon from './Icon.astro';
+import { ui } from '../i18n/ui';
+import { href, site } from '../data/site';
+import type { Lang } from '../data/services';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = ui[lang].mobileBar;
+const home = lang === 'es' ? '/' : '/en/';
+---
+
+<div class="mbar glass" data-mbar aria-hidden="true">
+  <a class="btn btn-gold" href={href(`${home}#book`)} tabindex="-1">
+    <Icon name="calendar-check" size={18} />
+    {t.book}
+  </a>
+  <a class="btn btn-quiet wa" href={site.whatsappMsg[lang]} target="_blank" rel="noopener" tabindex="-1">
+    <Icon name="whatsapp" brand size={20} />
+    <span>{t.whatsapp}</span>
+  </a>
+</div>
+
+<script>
+  // Appears once the hero's own booking console has scrolled away; hides near the closing section.
+  const bar = document.querySelector<HTMLElement>('[data-mbar]');
+  const hero = document.querySelector('[data-hero]');
+  const end = document.querySelector('[data-mbar-hide]');
+  if (bar) {
+    let pastHero = !hero;
+    let atEnd = false;
+    const sync = () => {
+      const show = pastHero && !atEnd;
+      bar.toggleAttribute('data-show', show);
+      bar.setAttribute('aria-hidden', String(!show));
+      bar.querySelectorAll('a').forEach((a) => (a.tabIndex = show ? 0 : -1));
+    };
+    if (hero) {
+      new IntersectionObserver(([e]) => {
+        pastHero = !e.isIntersecting;
+        sync();
+      }, { rootMargin: '-35% 0px 0px 0px' }).observe(hero);
+    }
+    if (end) {
+      new IntersectionObserver(([e]) => {
+        atEnd = e.isIntersecting;
+        sync();
+      }).observe(end);
+    }
+    sync();
+  }
+</script>
+
+<style>
+  .mbar {
+    display: none;
+  }
+  @media (max-width: 760px) {
+    .mbar {
+      position: fixed;
+      z-index: 40;
+      left: 10px;
+      right: 10px;
+      bottom: calc(10px + env(safe-area-inset-bottom));
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      padding: 8px;
+      border-radius: 22px;
+      transform: translateY(calc(100% + 24px));
+      opacity: 0;
+      transition:
+        transform 0.5s var(--ease-out),
+        opacity 0.3s var(--ease-out);
+    }
+    .mbar[data-show] {
+      transform: none;
+      opacity: 1;
+    }
+    .mbar .btn {
+      --h: 50px;
+      border-radius: 16px;
+    }
+    .wa {
+      padding-inline: 1.1rem;
+    }
+  }
+</style>

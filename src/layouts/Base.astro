@@ -1,0 +1,55 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import MobileBar from '../components/MobileBar.astro';
+import { ui } from '../i18n/ui';
+import { href } from '../data/site';
+import type { Lang } from '../data/services';
+
+interface Props {
+  lang: Lang;
+  title?: string;
+  description?: string;
+  /** Path of this page in the other language (without base). */
+  alternate: string;
+  /** Show the floating mobile action bar (hidden on pages that are already a booking flow). */
+  mobileBar?: boolean;
+}
+
+const { lang, title, description, alternate, mobileBar = true } = Astro.props;
+const t = ui[lang];
+const pageTitle = title ?? t.meta.title;
+const pageDesc = description ?? t.meta.description;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDesc} />
+    <meta name="theme-color" content="#0c111d" />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang={lang === 'es' ? 'en' : 'es'} href={new URL(href(alternate), Astro.site)} />
+    <link rel="icon" type="image/png" sizes="32x32" href={href('/favicon-32.png')} />
+    <link rel="apple-touch-icon" href={href('/apple-touch-icon.png')} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDesc} />
+    <meta property="og:image" content={new URL(href('/brand/icon-512.png'), Astro.site)} />
+    <meta property="og:locale" content={lang === 'es' ? 'es_US' : 'en_US'} />
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip" href="#main">{t.nav.skip}</a>
+    <Nav lang={lang} alternate={alternate} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+    {mobileBar && <MobileBar lang={lang} />}
+  </body>
+</html>

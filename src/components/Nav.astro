@@ -1,0 +1,299 @@
+---
+import Icon from './Icon.astro';
+import { ui } from '../i18n/ui';
+import { href, site } from '../data/site';
+import type { Lang } from '../data/services';
+
+interface Props {
+  lang: Lang;
+  alternate: string;
+}
+const { lang, alternate } = Astro.props;
+const t = ui[lang].nav;
+const home = lang === 'es' ? '/' : '/en/';
+const links = [
+  ['services', t.services],
+  ['process', t.process],
+  ['about', t.about],
+  ['faq', t.faq],
+  ['contact', t.contact],
+] as const;
+const portal = lang === 'es' ? '/portal/' : '/en/portal/';
+---
+
+<header class="nav" data-nav>
+  <div class="nav-bar">
+    <a class="brand" href={href(home)} aria-label="MG Tax Maker LLC">
+      <img src={href('/brand/lockup-h-light.png')} alt="" width="160" height="48" />
+    </a>
+
+    <nav class="links" aria-label={lang === 'es' ? 'Principal' : 'Main'}>
+      {links.map(([id, label]) => <a href={href(`${home}#${id}`)}>{label}</a>)}
+    </nav>
+
+    <div class="end">
+      <a class="lang" href={href(alternate)} hreflang={lang === 'es' ? 'en' : 'es'} aria-label={t.langLabel}>
+        <Icon name="globe" size={16} />
+        <span>{t.langShort}</span>
+      </a>
+      <a class="portal" href={href(portal)}>{t.portal}</a>
+      <a class="btn btn-gold btn-sm book" href={href(`${home}#book`)}>{t.book}</a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu-sheet" data-menu-open>
+        <Icon name="menu" size={22} />
+        <span class="sr-only">{t.menu}</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="sheet" id="menu-sheet" hidden data-sheet>
+    <div class="sheet-inner">
+      <div class="sheet-top">
+        <img src={href('/brand/lockup-h-light.png')} alt="" width="140" height="42" />
+        <button class="menu-btn" type="button" data-menu-close>
+          <Icon name="x" size={22} />
+          <span class="sr-only">{t.close}</span>
+        </button>
+      </div>
+      <nav class="sheet-links" aria-label={lang === 'es' ? 'Menú móvil' : 'Mobile menu'}>
+        {links.map(([id, label]) => <a href={href(`${home}#${id}`)} data-sheet-link>{label}</a>)}
+        <a href={href(portal)} data-sheet-link>{t.portal}</a>
+      </nav>
+      <div class="sheet-foot">
+        <a class="btn btn-gold" href={href(`${home}#book`)} data-sheet-link>{t.book}</a>
+        <a class="btn btn-ghost" href={site.whatsapp} target="_blank" rel="noopener">
+          <Icon name="whatsapp" brand size={18} /> WhatsApp
+        </a>
+        <a class="sheet-lang" href={href(alternate)} hreflang={lang === 'es' ? 'en' : 'es'}>
+          <Icon name="globe" size={16} />
+          {t.langLabel}
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  const nav = document.querySelector<HTMLElement>('[data-nav]');
+  const sheet = document.querySelector<HTMLElement>('[data-sheet]');
+  const openBtn = document.querySelector<HTMLButtonElement>('[data-menu-open]');
+  const closeBtn = document.querySelector<HTMLButtonElement>('[data-menu-close]');
+
+  const onScroll = () => nav?.toggleAttribute('data-scrolled', window.scrollY > 24);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  const setOpen = (open: boolean) => {
+    if (!sheet || !openBtn) return;
+    sheet.hidden = !open;
+    openBtn.setAttribute('aria-expanded', String(open));
+    document.documentElement.style.overflow = open ? 'hidden' : '';
+    (open ? closeBtn : openBtn)?.focus();
+  };
+  openBtn?.addEventListener('click', () => setOpen(true));
+  closeBtn?.addEventListener('click', () => setOpen(false));
+  sheet?.querySelectorAll('[data-sheet-link]').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && sheet && !sheet.hidden) setOpen(false);
+  });
+</script>
+
+<style>
+  .nav {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 50;
+    padding: 14px var(--gutter) 0;
+    pointer-events: none;
+  }
+  .nav-bar {
+    pointer-events: auto;
+    max-width: calc(var(--max) + 2rem);
+    margin-inline: auto;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    height: 64px;
+    padding: 0 10px 0 22px;
+    border-radius: var(--radius-pill);
+    border: 1px solid transparent;
+    transition:
+      background-color 0.4s var(--ease-out),
+      border-color 0.4s var(--ease-out),
+      box-shadow 0.4s var(--ease-out),
+      backdrop-filter 0.4s var(--ease-out);
+  }
+  .nav[data-scrolled] .nav-bar {
+    background: var(--glass);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+    border-color: var(--glass-edge);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.06),
+      0 18px 40px -20px rgb(0 0 0 / 0.7);
+  }
+  .brand img {
+    height: 42px;
+    width: auto;
+  }
+  .links {
+    display: flex;
+    gap: 0.25rem;
+    margin-inline: auto;
+  }
+  .links a,
+  .portal {
+    padding: 0.55rem 0.9rem;
+    border-radius: var(--radius-pill);
+    color: var(--ivory);
+    text-decoration: none;
+    font-size: 0.9375rem;
+    transition: background-color 0.2s var(--ease-out);
+  }
+  .links a:hover,
+  .portal:hover {
+    background: rgb(237 237 243 / 0.08);
+  }
+  .end {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-pill);
+    color: var(--ash);
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+  }
+  .lang:hover {
+    color: var(--ivory);
+    background: rgb(237 237 243 / 0.08);
+  }
+  .book {
+    margin-left: 0.25rem;
+  }
+  .menu-btn {
+    display: none;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 1px solid var(--line-strong);
+    background: transparent;
+    cursor: pointer;
+  }
+
+  /* mobile sheet */
+  .sheet {
+    pointer-events: auto;
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    background: rgb(8 11 20 / 0.72);
+    -webkit-backdrop-filter: blur(28px) saturate(140%);
+    backdrop-filter: blur(28px) saturate(140%);
+    animation: sheet-in 0.35s var(--ease-out);
+  }
+  @keyframes sheet-in {
+    from {
+      opacity: 0;
+    }
+  }
+  .sheet-inner {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 14px var(--gutter) calc(24px + env(safe-area-inset-bottom));
+  }
+  .sheet-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    padding-left: 22px;
+    padding-right: 10px;
+  }
+  .sheet-top img {
+    height: 30px;
+    width: auto;
+  }
+  .sheet-links {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2rem;
+  }
+  .sheet-links a {
+    font-family: var(--font-display);
+    font-stretch: 112%;
+    font-weight: 460;
+    font-size: 1.875rem;
+    padding: 0.85rem 0.25rem;
+    border-bottom: 1px solid var(--line);
+    text-decoration: none;
+    animation: link-in 0.5s var(--ease-out) both;
+  }
+  .sheet-links a:nth-child(2) { animation-delay: 30ms; }
+  .sheet-links a:nth-child(3) { animation-delay: 60ms; }
+  .sheet-links a:nth-child(4) { animation-delay: 90ms; }
+  .sheet-links a:nth-child(5) { animation-delay: 120ms; }
+  .sheet-links a:nth-child(6) { animation-delay: 150ms; }
+  @keyframes link-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+  }
+  .sheet-foot {
+    margin-top: auto;
+    display: grid;
+    gap: 0.75rem;
+    padding-top: 2rem;
+  }
+  .sheet-lang {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    color: var(--ash);
+    text-decoration: none;
+  }
+
+  @media (max-width: 1080px) {
+    .links {
+      display: none;
+    }
+    .end {
+      margin-left: auto;
+    }
+  }
+  @media (max-width: 760px) {
+    .nav {
+      padding-top: 10px;
+    }
+    .nav-bar {
+      height: 58px;
+      padding: 0 6px 0 16px;
+    }
+    .brand img {
+      height: 34px;
+    }
+    .portal,
+    .lang {
+      display: none;
+    }
+    .menu-btn {
+      display: grid;
+    }
+  }
+  @media (max-width: 380px) {
+    .book {
+      display: none;
+    }
+  }
+</style>
